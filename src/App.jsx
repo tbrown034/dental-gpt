@@ -1,19 +1,24 @@
 import React, { useState } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
+import { askGPT3 } from "./api/gptApi";
 
 function App() {
   const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [showQuestion, setShowQuestion] = useState(false);
   const [showForm, setShowForm] = useState(true);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const response = await askGPT3(question);
+    setAnswer(response);
     setShowQuestion(true);
     setShowForm(false);
   };
 
   const handleReset = () => {
     setQuestion("");
+    setAnswer("");
     setShowQuestion(false);
     setShowForm(true);
   };
@@ -52,7 +57,7 @@ function App() {
             You asked: <span className="text-yellow-300">{question}</span>
           </p>
           <p className="text-2xl">
-            Dental GPT says: <span className="text-yellow-300"></span>
+            Dental GPT says: <span className="text-yellow-300">{answer}</span>
           </p>
           <button
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded inline-flex items-center justify-center"
